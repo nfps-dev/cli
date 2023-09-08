@@ -1,0 +1,23 @@
+{
+	"extends": "@blake.regalia/tsconfig/tsconfig.node.json",
+
+	"compilerOptions": {
+		"baseUrl": ".",
+		"outDir": "dist",
+
+		"declaration": true,
+		"declarationDir": "dist",
+		"noImplicitReturns": false,
+
+		"module": "ESNext"
+	},
+
+	"include": [
+		"src/**/*.d.ts",
+		"src/**/*.ts",
+	],
+
+	"ts-node": {
+		"experimentalSpecifierResolution": "node"
+	},
+}
