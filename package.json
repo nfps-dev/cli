@@ -25,7 +25,7 @@
     "nfp": "./dist/main.js"
   },
   "scripts": {
-    "build": "tsc && npx tsc-esm-fix --target='dist/mjs'"
+    "build": "tsc && npx tsc-esm-fix --target='dist'"
   },
   "keywords": [
     "nfp",
