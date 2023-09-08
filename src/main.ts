@@ -1,3 +1,4 @@
+#!/usr/bin/env node
 import type {Command} from './common';
 
 import type {Dict} from '@blake.regalia/belt';
