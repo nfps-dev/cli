@@ -1,6 +1,6 @@
 {
   "name": "@nfps.dev/cli",
-  "version": "0.0.6",
+  "version": "0.0.7",
   "description": "CLI for NFP development, inspection, and manipulation",
   "homepage": "https://nfps.dev/",
   "repository": "@nfps.dev/cli",
