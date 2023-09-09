@@ -19,8 +19,6 @@ import {H_CMDS_SET_VK} from './cmds/set-vk';
 import {H_CMDS_STORAGE} from './cmds/storage';
 import {H_CMDS_WHOAMI} from './cmds/whoami';
 
-import G_PACKAGE_JSON from '../package.json';
-
 // polyfil crypto for older node versions
 if(!(globalThis as any).crypto) (globalThis as any).crypto = webcrypto;
 
@@ -88,7 +86,7 @@ const yargs = yargsImport(hideBin(process.argv));
 await yargs
 	.scriptName('nfp')
 	.demandCommand(1)
-	.version(G_PACKAGE_JSON.version)
+	.version()
 	.alias('v', 'version')
 	.help()
 	.alias('h', 'help')

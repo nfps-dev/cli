@@ -24,7 +24,7 @@
     "clean": "rm -rf dist/*",
     "fix:nested": "rm dist/package.json && mv dist/src/* dist/ && rm -rf dist/src",
     "fix:tsc": "npx tsc-esm-fix --target='dist'",
-    "build": "yarn clean && tsc && yarn fix:nested && yarn fix:tsc"
+    "build": "tsc && yarn fix:tsc"
   },
   "keywords": [
     "nfp",
