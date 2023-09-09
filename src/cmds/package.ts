@@ -150,7 +150,7 @@ export const H_CMDS_PACKAGE = {
 
 					// determine content-type
 					const si_content_type = g_argv.contentType || {
-						js: 'application/ecmascript',
+						'.js': 'application/ecmascript',
 					}[path.extname(sr_path)] || mime.lookup(path.extname(sr_path)) || 'application/octet-stream';
 
 					// options
