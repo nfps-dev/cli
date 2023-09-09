@@ -98,4 +98,5 @@ await yargs
 			type: 'boolean',
 		},
 	})
+	.completion()
 	.parse();
