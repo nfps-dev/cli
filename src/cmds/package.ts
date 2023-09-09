@@ -149,7 +149,9 @@ export const H_CMDS_PACKAGE = {
 					const sr_path = g_argv.file!;
 
 					// determine content-type
-					const si_content_type = g_argv.contentType || mime.lookup(path.extname(sr_path)) || 'application/octet-stream';
+					const si_content_type = g_argv.contentType || {
+						js: 'application/ecmascript',
+					}[path.extname(sr_path)] || mime.lookup(path.extname(sr_path)) || 'application/octet-stream';
 
 					// options
 					const si_access = g_argv.access;

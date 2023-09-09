@@ -176,8 +176,6 @@ export const H_CMDS_INIT = {
 				`NFP_SELF_CONTRACT="${sa_contract || ''}"`,
 				`NFP_SELF_TOKEN="${si_token || ''}"`,
 				'',
-				`NFP_OWNER="${sa_gen}"`,
-				'',
 				`NFP_WALLET_PRIVATE_KEY="${sb16_sk_gen}"  # ${sa_gen}`,
 			].join('\n');
 

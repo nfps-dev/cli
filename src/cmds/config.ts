@@ -8,7 +8,6 @@ export const H_CONFIG_KEYS = {
 	chain: 'SELF_CHAIN',
 	contract: 'SELF_CONTRACT',
 	token: 'SELF_TOKEN',
-	owner: 'SELF_OWNER',
 	vk: 'VIEWING_KEY',
 };
 
