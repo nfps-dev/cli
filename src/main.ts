@@ -17,6 +17,7 @@ import yargsImport from 'yargs';
 import {hideBin} from 'yargs/helpers';
 
 import {H_CMDS_CONFIG} from './cmds/config';
+import {H_CMDS_DELEGATES} from './cmds/delegates';
 import {H_CMDS_INIT} from './cmds/init';
 import {H_CMDS_MINT} from './cmds/mint';
 import {H_CMDS_MINTERS} from './cmds/minters';
@@ -89,6 +90,9 @@ const yargs = yargsImport(hideBin(process.argv));
 
 	// nfp whoami
 	H_CMDS_WHOAMI,
+
+	// nfp delegates <cmd>
+	H_CMDS_DELEGATES,
 ] as unknown as Dict<Command>[]).forEach((h_cmds) => {
 	commands(h_cmds);
 });

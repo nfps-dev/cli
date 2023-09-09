@@ -229,20 +229,8 @@ export async function mutate_env(h_replacements: Dict): Promise<void> {
 		}
 	}
 
-	// // confirm overwrite
-	// const {overwrite:b_overwrite} = await prompts({
-	// 	type: 'confirm',
-	// 	name: 'overwrite',
-	// 	message: 'Save viewing key to .env file?',
-	// 	initial: true,
-	// }) as {
-	// 	overwrite: boolean;
-	// };
-
 	// // write to disk
-	// if(b_overwrite) {
 	await writeFile('.env', sx_env);
-	// }
 
 	// verbose
 	debug(`${kleur.green('✓')} ${kleur.bold('Updated config saved to .env file')}`);
@@ -262,6 +250,9 @@ export async function cli_exec_contract(
 
 	// resolve price
 	const x_price = g_argv.price || (H_DEFAULT_NETWORKS as Dict<{price?: number}>)[si_chain || '']?.price || X_GAS_PRICE_DEFAULT;
+
+	// override gas limit
+	if(g_argv.gas) xg_limit = BigInt(g_argv.gas);
 
 	// prep fee
 	const a_fees: [SlimCoin] = [[`${BigInt(Math.ceil(Number(xg_limit) * x_price))}`, 'uscrt']];
