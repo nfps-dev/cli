@@ -5,7 +5,10 @@ import type {Dict} from '@blake.regalia/belt';
 
 import {webcrypto} from 'node:crypto';
 
+import {readFileSync} from 'node:fs';
+
 import {ode} from '@blake.regalia/belt';
+import {safe_json} from '@solar-republic/neutrino';
 import {WebSocket} from 'ws';
 import yargsImport from 'yargs';
 import {hideBin} from 'yargs/helpers';
@@ -26,6 +29,8 @@ if(!(globalThis as any).crypto) (globalThis as any).crypto = webcrypto;
 // @ts-expect-error WebSocket typing
 globalThis.WebSocket = WebSocket;
 
+// parse version from package.json
+const sx_version = safe_json<{version: string}>(readFileSync('../package.json', 'utf-8'))!.version;
 
 // eslint-disable-next-line @typescript-eslint/naming-convention
 function commands(h_commands: Dict<Command>, y_yargs: yargsImport.Argv=yargs) {
@@ -86,7 +91,7 @@ const yargs = yargsImport(hideBin(process.argv));
 await yargs
 	.scriptName('nfp')
 	.demandCommand(1)
-	.version()
+	.version(sx_version)
 	.alias('v', 'version')
 	.help()
 	.alias('h', 'help')

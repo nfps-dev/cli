@@ -1,6 +1,6 @@
 {
   "name": "@nfps.dev/cli",
-  "version": "0.0.12",
+  "version": "0.0.11",
   "description": "CLI for NFP development, inspection, and manipulation",
   "homepage": "https://nfps.dev/",
   "repository": "@nfps.dev/cli",
@@ -22,7 +22,6 @@
   },
   "scripts": {
     "clean": "rm -rf dist/*",
-    "fix:nested": "rm dist/package.json && mv dist/src/* dist/ && rm -rf dist/src",
     "fix:tsc": "npx tsc-esm-fix --target='dist'",
     "build": "tsc && yarn fix:tsc"
   },
