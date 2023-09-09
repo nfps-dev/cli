@@ -36,6 +36,8 @@ export type Command<
 	>) => void | Promise<void>;
 };
 
+let b_quiet = false;
+
 export function define_command<
 	g_opts extends Dict<Options>={},
 	g_pos extends Dict<PositionalOptions>={},
@@ -44,6 +46,10 @@ export function define_command<
 		...gc_cmd,
 		...gc_cmd.handler? {
 			async handler(g_argv) {
+				// enable quiet mode
+				if(g_argv['quiet']) b_quiet = true;
+
+				// handle uncaught errors
 				try {
 					await gc_cmd.handler!(g_argv);
 				}
@@ -55,7 +61,7 @@ export function define_command<
 	};
 }
 
-export const debug = (s_out: string): void => ((process.stderr.write(s_out+'\n'), void 0));
+export const debug = (s_out: string): void => ((b_quiet? void 0: process.stderr.write(s_out+'\n'), void 0));
 
 // eslint-disable-next-line no-console
 export const result = (s_out: string): void => console.log(s_out);
@@ -152,7 +158,7 @@ export async function load<
  * parses a cli option value as JSON or simplified key-value
  * e.g., --entry "key: 'value'"
  */
-export function cli_entry(sx_entry: string): JsonObject {
+export function cli_entries(sx_entry: string): JsonObject {
 	try {
 		return JSON.parse(sx_entry) as JsonObject;
 	}

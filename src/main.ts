@@ -19,6 +19,8 @@ import {H_CMDS_SET_VK} from './cmds/set-vk';
 import {H_CMDS_STORAGE} from './cmds/storage';
 import {H_CMDS_WHOAMI} from './cmds/whoami';
 
+import G_PACKAGE_JSON from '../package.json' assert {type: 'json'};
+
 // polyfil crypto for older node versions
 if(!(globalThis as any).crypto) (globalThis as any).crypto = webcrypto;
 
@@ -47,9 +49,6 @@ function commands(h_commands: Dict<Command>, y_yargs: yargsImport.Argv=yargs) {
 				for(const [si_arg, g_arg] of ode(g_cmd.pos || {})) {
 					y_yargs_sub.positional(si_arg, g_arg);
 				}
-
-				// add help option to command
-				y_yargs_sub.help();
 			}, g_cmd.handler);
 		}
 	}
@@ -89,6 +88,14 @@ const yargs = yargsImport(hideBin(process.argv));
 await yargs
 	.scriptName('nfp')
 	.demandCommand(1)
+	.version(G_PACKAGE_JSON.version)
+	.alias('v', 'version')
 	.help()
 	.alias('h', 'help')
+	.options({
+		quiet: {
+			alias: 'q',
+			type: 'boolean',
+		},
+	})
 	.parse();
