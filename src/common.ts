@@ -320,7 +320,6 @@ export async function cli_exec_contract(
 		'height': g_tx_res!.height,
 		'tx hash': si_txn,
 		'gas used/spent': `${g_tx_res!.result.gas_used}/${g_tx_res!.result.gas_wanted}`,
-		'response data': s_res,
 	});
 
 	// forward to caller

@@ -2,8 +2,9 @@ import {readFile} from 'node:fs/promises';
 import path from 'node:path';
 import zlib from 'node:zlib';
 
-import {buffer_to_base64, buffer_to_base93} from '@blake.regalia/belt';
+import {buffer_to_base64, buffer_to_base93, type Dict} from '@blake.regalia/belt';
 import {query_contract_infer} from '@solar-republic/neutrino';
+import kleur from 'kleur';
 import mime from 'mime-types';
 import prettyBytes from 'pretty-bytes';
 
@@ -31,7 +32,15 @@ export const H_CMDS_PACKAGE = {
 					} = await load(g_argv, ['vk']);
 
 					// query contract
-					const [g_package, xc_code, s_error] = await query_contract_infer(k_contract, 'package_info', {
+					const [g_package, xc_code, s_error] = await query_contract_infer<{
+						info: {
+							index: number;
+							tags: string[];
+							metadata: object;
+							access: string;
+						}[];
+						version_count: number;
+					}>(k_contract, 'package_info', {
 						package_id: g_argv.package_id!,
 					}, sh_vk);
 
@@ -39,7 +48,19 @@ export const H_CMDS_PACKAGE = {
 					if(xc_code) return exit(s_error);
 
 					// print
-					print('Package info');
+					const h_nested: Dict = {};
+					const h_tags: Dict = {};
+					for(const g_version of (g_package?.info || []).reverse()) {
+						h_nested[g_version.index+''] = [
+							g_version.access,
+							JSON.stringify(g_version.metadata || {}),
+							g_version.tags.map(s => h_tags[s]? `@${s}`: h_tags[s]=kleur.cyan(`@${s}`)).join(', '),
+						].join(' ');
+					}
+
+					print('Package info', h_nested);
+
+					print('Raw response:');
 					result(JSON.stringify(g_package));
 				},
 			}),
@@ -228,6 +249,10 @@ export const H_CMDS_PACKAGE = {
 							},
 						},
 					}, xg_limit);
+
+					// result
+					print('Result:');
+					result(s_res);
 				},
 			}),
 		},

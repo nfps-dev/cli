@@ -8,6 +8,8 @@ import {webcrypto} from 'node:crypto';
 import {readFileSync} from 'node:fs';
 import path from 'node:path';
 
+import {fileURLToPath} from 'node:url';
+
 import {ode} from '@blake.regalia/belt';
 import {safe_json} from '@solar-republic/neutrino';
 import {WebSocket} from 'ws';
@@ -31,7 +33,9 @@ if(!(globalThis as any).crypto) (globalThis as any).crypto = webcrypto;
 globalThis.WebSocket = WebSocket;
 
 // parse version from package.json
-const sx_version = safe_json<{version: string}>(readFileSync(path.join(__dirname, '..', 'package.json'), 'utf-8'))!.version;
+const sx_version = safe_json<{version: string}>(readFileSync(
+	path.join(globalThis.__dirname || path.dirname(fileURLToPath(import.meta.url)), '..', 'package.json'),
+	'utf-8'))!.version;
 
 // eslint-disable-next-line @typescript-eslint/naming-convention
 function commands(h_commands: Dict<Command>, y_yargs: yargsImport.Argv=yargs) {
