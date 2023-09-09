@@ -14,9 +14,6 @@
   "main": "dist/main.js",
   "module": "dist/main.js",
   "types": "dist/main.d.ts",
-  "exports": {
-    "./package.json": "./package.json"
-  },
   "files": [
     "dist"
   ],
@@ -24,7 +21,10 @@
     "nfp": "./dist/main.js"
   },
   "scripts": {
-    "build": "tsc && npx tsc-esm-fix --target='dist'"
+    "clean": "rm -rf dist/*",
+    "fix:nested": "rm dist/package.json && mv dist/src/* dist/ && rm -rf dist/src",
+    "fix:tsc": "npx tsc-esm-fix --target='dist'",
+    "build": "yarn clean && tsc && yarn fix:nested && yarn fix:tsc"
   },
   "keywords": [
     "nfp",
