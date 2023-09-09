@@ -19,7 +19,7 @@ import {H_CMDS_SET_VK} from './cmds/set-vk';
 import {H_CMDS_STORAGE} from './cmds/storage';
 import {H_CMDS_WHOAMI} from './cmds/whoami';
 
-import G_PACKAGE_JSON from '../package.json' assert {type: 'json'};
+import G_PACKAGE_JSON from '../package.json';
 
 // polyfil crypto for older node versions
 if(!(globalThis as any).crypto) (globalThis as any).crypto = webcrypto;
