@@ -1,6 +1,6 @@
 import {safe_json} from '@solar-republic/neutrino';
 
-import {cli_exec_contract, define_command, load} from '../common';
+import {cli_exec_contract, define_command, load, mutate_env} from '../common';
 import {H_OPTS_EXEC} from '../constants';
 
 export const H_CMDS_MINT = {
@@ -23,6 +23,10 @@ export const H_CMDS_MINT = {
 			},
 		},
 		async handler(g_argv) {
+			const {
+				k_wallet,
+			} = await load(g_argv);
+
 			// mint
 			await cli_exec_contract(g_argv, {
 				mint_nft: {
@@ -31,6 +35,12 @@ export const H_CMDS_MINT = {
 					private_metadata: safe_json(g_argv.private ?? '') || {},
 				},
 			}, 60_000n);
+
+			// save to env
+			await mutate_env({
+				NFP_OWNER: k_wallet.addr,
+				NFP_TOKEN_ID: g_argv.tokenId!,
+			});
 		},
 	}),
 };
