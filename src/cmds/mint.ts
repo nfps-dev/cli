@@ -4,7 +4,7 @@ import {cli_exec_contract, define_command, load} from '../common';
 import {H_OPTS_EXEC} from '../constants';
 
 export const H_CMDS_MINT = {
-	'mint <token_id>': define_command({
+	'mint <token-id>': define_command({
 		info: 'mint a new token',
 		opts: {
 			...H_OPTS_EXEC,
@@ -17,15 +17,16 @@ export const H_CMDS_MINT = {
 				desc: 'JSON for the private metadata',
 			},
 		},
+		pos: {
+			'token-id': {
+				type: 'string',
+			},
+		},
 		async handler(g_argv) {
-			const {
-				si_token,
-			} = await load(g_argv, ['token-id']);
-
 			// mint
 			await cli_exec_contract(g_argv, {
 				mint_nft: {
-					token_id: si_token,
+					token_id: g_argv.tokenId!,
 					public_metadata: safe_json(g_argv.public ?? '') || {},
 					private_metadata: safe_json(g_argv.private ?? '') || {},
 				},

@@ -25,8 +25,8 @@ export const H_DEFAULT_NETWORKS = {
 	},
 	'pulsar-3': {
 		title: 'Testnet',
-		lcds: 'https://lcd.testnet.secretsaturn.net,https://api.pulsar.scrttestnet.com',
-		rpcs: 'https://rpc.testnet.secretsaturn.net,https://rpc.pulsar.scrttestnet.com',
+		lcds: 'https://lcd.testnet.secretsaturn.net,https://api.pulsar3.scrttestnet.com',
+		rpcs: 'https://rpc.testnet.secretsaturn.net,https://rpc.pulsar3.scrttestnet.com',
 	},
 	'secretdev-1': {
 		title: 'Localsecret',
