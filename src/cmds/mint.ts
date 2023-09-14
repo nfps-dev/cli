@@ -39,7 +39,7 @@ export const H_CMDS_MINT = {
 			// save to env
 			await mutate_env({
 				NFP_OWNER: k_wallet.addr,
-				NFP_TOKEN_ID: g_argv.tokenId!,
+				NFP_SELF_TOKEN: g_argv.tokenId!,
 			});
 		},
 	}),
