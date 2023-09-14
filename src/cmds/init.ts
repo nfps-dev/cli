@@ -7,7 +7,6 @@ import {
 	gen_sk,
 	sk_to_pk,
 	pubkey_to_bech32,
-	bech32_decode,
 } from '@solar-republic/neutrino';
 import prompts from 'prompts';
 
@@ -152,8 +151,7 @@ export const H_CMDS_INIT = {
 				{
 					type: (sa?: string) => sa? 'text': null,
 					name: 'token_id',
-					message: 'Token ID',
-					validate: validate_non_empty,
+					message: 'Token ID (leave balnk if one does not yet exist)',
 				},
 			]);
 
