@@ -1,6 +1,4 @@
-import {query_contract_infer} from '@solar-republic/neutrino';
-
-import {cli_exec_contract, define_command, exit, load, print, result} from '../common';
+import {cli_exec_contract, cli_query_contract, define_command, load} from '../common';
 import {H_OPTS_EXEC} from '../constants';
 
 const XG_GAS_DEFAULT = 40_000n;
@@ -12,21 +10,7 @@ export const H_CMDS_DELEGATES = {
 			'list-owner': define_command({
 				info: 'list delegates approved for all tokens owned by owner',
 				async handler(g_argv) {
-					const {
-						sh_vk,
-						k_contract,
-						k_wallet,
-					} = await load(g_argv, ['vk']);
-
-					// query
-					const [g_approvals, xc_code, s_err] = await query_contract_infer(k_contract, 'owner_delegate_approvals', {}, [sh_vk, k_wallet.addr]);
-
-					// error
-					if(xc_code) return exit(s_err);
-
-					// results
-					print('Delegates approved for owner:');
-					result(JSON.stringify(g_approvals));
+					await cli_query_contract(g_argv, 'owner_delegate_approvals');
 				},
 			}),
 			'list-token [token-id]': define_command({
@@ -38,22 +22,7 @@ export const H_CMDS_DELEGATES = {
 					},
 				},
 				async handler(g_argv) {
-					const {
-						sh_vk,
-						si_token,
-						k_contract,
-						k_wallet,
-					} = await load(g_argv, ['vk']);
-
-					// query
-					const [g_approvals, xc_code, s_err] = await query_contract_infer(k_contract, 'token_delegate_approvals', {}, [sh_vk, k_wallet.addr]);
-
-					// error
-					if(xc_code) return exit(s_err);
-
-					// results
-					print(`Delegates approved for token id "${si_token}":`);
-					result(JSON.stringify(g_approvals));
+					await cli_query_contract(g_argv, 'token_delegate_approvals');
 				},
 			}),
 			'revoke <address>': define_command({

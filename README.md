@@ -19,3 +19,12 @@ yarn global add @nfps.dev/cli
 ```sh
 nfp --help
 ```
+
+Any command that has a machine-readable output (e.g., from querying or executing the contract) will write only that output to `stdout`, whereas everything else gets written to `stderr` for a better UX from CLI.
+
+This means you can safely pipe stdout to another command or redirect it to a file.
+
+For example:
+```sh
+nfp minters list > minters.json
+```

@@ -3,8 +3,8 @@ import type {Includes} from 'ts-toolbelt/out/List/Includes';
 
 import type {Merge} from 'ts-toolbelt/out/Object/Merge';
 
-import type {Dict, JsonObject} from '@blake.regalia/belt';
-import type {HttpsUrl, SecretBech32, SlimCoin} from '@solar-republic/neutrino';
+import type {Dict, JsonObject, Nilable} from '@blake.regalia/belt';
+
 
 import type {ArgumentsCamelCase, InferredOptionTypes, Options, PositionalOptions} from 'yargs';
 
@@ -12,6 +12,7 @@ import {access, constants, readFile, writeFile} from 'fs/promises';
 import vm from 'vm';
 
 import {base64_to_buffer, hex_to_buffer, oderac, ode, escape_regex} from '@blake.regalia/belt';
+import {query_contract_infer, type AuthSecret, type HttpsUrl, type SecretBech32, type SlimCoin} from '@solar-republic/neutrino';
 import {SecretContract, Wallet, bech32_decode, exec_contract} from '@solar-republic/neutrino';
 import {configDotenv} from 'dotenv';
 import kleur from 'kleur';
@@ -234,6 +235,47 @@ export async function mutate_env(h_replacements: Dict): Promise<void> {
 
 	// verbose
 	debug(`${kleur.green('✓')} ${kleur.bold('Updated config saved to .env file')}`);
+}
+
+
+export async function cli_query_contract(
+	g_argv: TxOpts,
+	si_query: string,
+	h_args: Nilable<object>={},
+	z_auth?: Nilable<AuthSecret>
+): Promise<ReturnType<typeof query_contract_infer>> {
+	const {
+		sh_vk,
+		si_chain,
+		k_contract,
+		k_wallet,
+	} = await load(g_argv, ['vk']);
+
+	z_auth ??= [sh_vk, k_wallet.addr];
+
+	// verbose
+	print('Querying contract', {
+		chain: si_chain,
+		auth: z_auth,
+		contract: k_contract.addr,
+		query: JSON.stringify({
+			[si_query]: h_args,
+		}),
+	});
+
+	// query
+	const a_response = await query_contract_infer(k_contract, si_query, h_args, z_auth);
+	const [g_response, xc_code, s_err] = a_response;
+
+	// error
+	if(xc_code) return exit(s_err);
+
+	// results
+	print('Response:');
+	result(JSON.stringify(g_response));
+
+	// return 
+	return a_response;
 }
 
 export async function cli_exec_contract(
