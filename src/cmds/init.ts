@@ -169,6 +169,7 @@ export const H_CMDS_INIT = {
 				'',
 				`NFP_WEB_LCDS="${s_lcds}"`,
 				`NFP_WEB_RPCS="${s_rpcs}"`,
+				`NFP_WEB_COMCS="https://x.s2r.sh/"`,
 				'',
 				`NFP_SELF_CHAIN="${si_chain}"`,
 				`NFP_SELF_CONTRACT="${sa_contract || ''}"`,

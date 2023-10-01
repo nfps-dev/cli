@@ -5,6 +5,8 @@ import type {Merge} from 'ts-toolbelt/out/Object/Merge';
 
 import type {Dict, JsonObject, Nilable} from '@blake.regalia/belt';
 
+import type {SecretAccAddr, ContractInterface, Snip821} from '@solar-republic/contractor';
+
 
 import type {ArgumentsCamelCase, InferredOptionTypes, Options, PositionalOptions} from 'yargs';
 
@@ -12,8 +14,8 @@ import {access, constants, readFile, writeFile} from 'fs/promises';
 import vm from 'vm';
 
 import {base64_to_buffer, hex_to_buffer, oderac, ode, escape_regex} from '@blake.regalia/belt';
-import {query_contract_infer, type AuthSecret, type HttpsUrl, type SecretBech32, type SlimCoin} from '@solar-republic/neutrino';
-import {SecretContract, Wallet, bech32_decode, exec_contract} from '@solar-republic/neutrino';
+import {SecretApp, type AuthSecret, type HttpsUrl, type SlimCoin, type WeakSecretAccAddr, type AuthSecret_ViewerInfo} from '@solar-republic/neutrino';
+import {query_contract_infer, SecretContract, Wallet, bech32_decode, exec_contract} from '@solar-republic/neutrino';
 import {configDotenv} from 'dotenv';
 import kleur from 'kleur';
 import prompts from 'prompts';
@@ -87,9 +89,10 @@ export async function load<
 	si_chain: string | undefined;
 	a_lcds: string[];
 	a_rpcs: string[];
-	sa_contract: SecretBech32 | undefined;
+	sa_contract: SecretAccAddr | undefined;
 	si_token: If<Includes<a_reqs, 'token-id'>, string, undefined>;
-	k_contract: SecretContract;
+	k_contract: SecretContract<Snip821>;
+	k_service: SecretApp<Snip821>;
 	k_wallet: Wallet;
 }> {
 	// load environment variables
@@ -140,7 +143,7 @@ export async function load<
 	const k_wallet = await Wallet(atu8_sk, si_chain, p_lcd, p_rpc);
 
 	// connect to the contract
-	const k_contract = await SecretContract(p_lcd, sa_contract as SecretBech32);
+	const k_contract = await SecretContract<Snip821>(p_lcd, sa_contract as SecretAccAddr);
 
 	return {
 		sh_sk,
@@ -148,10 +151,11 @@ export async function load<
 		si_chain,
 		a_lcds,
 		a_rpcs,
-		sa_contract: sa_contract as SecretBech32,
+		sa_contract: sa_contract as SecretAccAddr,
 		si_token: si_token as If<Includes<a_reqs, 'token-id'>, string, undefined>,
 		k_contract,
 		k_wallet,
+		k_service: SecretApp<Snip821>(k_wallet, k_contract, 0.125),
 	};
 }
 
@@ -241,7 +245,7 @@ export async function mutate_env(h_replacements: Dict): Promise<void> {
 export async function cli_query_contract(
 	g_argv: TxOpts,
 	si_query: string,
-	h_args: Nilable<object>={},
+	h_args: Nilable<JsonObject>={},
 	z_auth?: Nilable<AuthSecret>
 ): Promise<ReturnType<typeof query_contract_infer>> {
 	const {
@@ -256,7 +260,7 @@ export async function cli_query_contract(
 	// verbose
 	print('Querying contract', {
 		chain: si_chain,
-		auth: z_auth,
+		auth: z_auth? ['*'.repeat(6), z_auth[1]]: null,
 		contract: k_contract.addr,
 		query: JSON.stringify({
 			[si_query]: h_args,
@@ -264,7 +268,7 @@ export async function cli_query_contract(
 	});
 
 	// query
-	const a_response = await query_contract_infer(k_contract, si_query, h_args, z_auth);
+	const a_response = await query_contract_infer(k_contract, si_query, h_args || {}, z_auth as AuthSecret_ViewerInfo);
 	const [g_response, xc_code, s_err] = a_response;
 
 	// error

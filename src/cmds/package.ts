@@ -2,7 +2,7 @@ import {readFile} from 'node:fs/promises';
 import path from 'node:path';
 import zlib from 'node:zlib';
 
-import {buffer_to_base64, buffer_to_base93, type Dict} from '@blake.regalia/belt';
+import {buffer_to_base64, buffer_to_base93, buffer_to_text, type Dict} from '@blake.regalia/belt';
 import {query_contract_infer} from '@solar-republic/neutrino';
 import kleur from 'kleur';
 import mime from 'mime-types';
@@ -29,18 +29,23 @@ export const H_CMDS_PACKAGE = {
 					const {
 						sh_vk,
 						k_contract,
+						k_service,
 					} = await load(g_argv, ['vk']);
 
 					// query contract
-					const [g_package, xc_code, s_error] = await query_contract_infer<{
-						info: {
-							index: number;
-							tags: string[];
-							metadata: object;
-							access: string;
-						}[];
-						version_count: number;
-					}>(k_contract, 'package_info', {
+					// const [g_package, xc_code, s_error] = await query_contract_infer<{
+					// 	info: {
+					// 		index: number;
+					// 		tags: string[];
+					// 		metadata: object;
+					// 		access: string;
+					// 	}[];
+					// 	version_count: number;
+					// }>(k_contract, 'package_info', {
+					// 	package_id: g_argv.package_id!,
+					// }, sh_vk);
+
+					const [g_package, xc_code, s_error] = await k_service.query('package_info', {
 						package_id: g_argv.package_id!,
 					}, sh_vk);
 
@@ -54,7 +59,7 @@ export const H_CMDS_PACKAGE = {
 						h_nested[g_version.index+''] = [
 							g_version.access,
 							JSON.stringify(g_version.metadata || {}),
-							g_version.tags.map(s => h_tags[s]? `@${s}`: h_tags[s]=kleur.cyan(`@${s}`)).join(', '),
+							(g_version.tags as string[]).map(s => h_tags[s]? `@${s}`: h_tags[s]=kleur.cyan(`@${s}`)).join(', '),
 						].join(' ');
 					}
 
@@ -154,6 +159,15 @@ export const H_CMDS_PACKAGE = {
 						type: 'string',
 						desc: 'content-type (MIME) of the file. defaults to guessing based on file extension',
 					},
+					'raw': {
+						type: 'boolean',
+						desc: 'bypass compression and encoding by directly uploading the raw bytes of the given file (must already be base64-encoded)',
+					},
+					'content-encoding': {
+						type: 'string',
+						desc: 'explicitly sets the content-encoding (must be used with the --raw option)',
+						implies: ['raw'],
+					},
 				},
 				pos: {
 					file: {
@@ -195,7 +209,7 @@ export const H_CMDS_PACKAGE = {
 					const sb93_compressed = buffer_to_base93(atu8_compressed);
 					// const sx_raw = Array.from(atu8_compressed).map(x => String.fromCharCode(x)).join('');
 
-					const sx_upload = sb64_compressed;
+					const sx_upload = g_argv.raw? buffer_to_text(atu8_contents): sb64_compressed;
 
 					// verbose
 					print('Gzip compression results:', {
@@ -245,7 +259,7 @@ export const H_CMDS_PACKAGE = {
 							data: {
 								bytes: sx_upload,
 								content_type: si_content_type,
-								content_encoding: 'gzip',
+								content_encoding: g_argv.raw? g_argv.contentEncoding || 'identity': 'gzip',
 							},
 						},
 					}, xg_limit);

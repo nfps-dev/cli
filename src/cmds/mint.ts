@@ -18,7 +18,7 @@ export const H_CMDS_MINT = {
 			},
 		},
 		pos: {
-			'token-id': {
+			tokenId: {
 				type: 'string',
 			},
 		},
