@@ -1,5 +1,4 @@
 
-import { query_contract_infer } from 'node_modules/@solar-republic/neutrino/dist/mjs/app-layer';
 import {cli_entries, cli_exec_contract, cli_query_contract, define_command, exit, load, print, result, type TxOpts} from '../common';
 
 

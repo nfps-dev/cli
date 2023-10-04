@@ -1,4 +1,4 @@
-import {H_OPTS_EXEC} from 'src/constants';
+import {H_OPTS_EXEC} from '../constants';
 import {cli_exec_contract, define_command, mutate_env} from '../common';
 
 export const H_CMDS_SET_VK = {
