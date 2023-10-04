@@ -1,3 +1,4 @@
+import {H_OPTS_EXEC} from 'src/constants';
 import {cli_exec_contract, define_command, mutate_env} from '../common';
 
 export const H_CMDS_SET_VK = {
@@ -8,6 +9,7 @@ export const H_CMDS_SET_VK = {
 				type: 'string',
 			},
 		},
+		opts: H_OPTS_EXEC,
 		async handler(g_argv) {
 			// destructure viewing key from positional argument
 			const sh_vk = g_argv.new_viewing_key!;

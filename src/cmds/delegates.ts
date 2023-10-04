@@ -22,7 +22,9 @@ export const H_CMDS_DELEGATES = {
 					},
 				},
 				async handler(g_argv) {
-					await cli_query_contract(g_argv, 'token_delegate_approvals');
+					await cli_query_contract(g_argv, 'token_delegate_approvals', {
+						token_id: g_argv.tokenId,
+					});
 				},
 			}),
 			'revoke <address>': define_command({
