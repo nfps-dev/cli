@@ -46,7 +46,7 @@ export const H_CMDS_QUERY = {
 				viewing_key: sh_vk,
 			};
 
-			await cli_query_contract(g_argv, g_argv.method!, h_args);
+			await cli_query_contract(g_argv, g_argv.method!, h_args, null);
 		},
 	}),
 };
