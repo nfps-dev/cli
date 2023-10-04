@@ -105,7 +105,7 @@ await yargs
 	.scriptName('nfp')
 	.demandCommand(1)
 	.version(sx_version)
-	.alias('v', 'version')
+	// .alias('v', 'version')
 	.help()
 	.alias('h', 'help')
 	.options({
