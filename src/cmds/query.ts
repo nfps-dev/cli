@@ -32,6 +32,7 @@ export const H_CMDS_QUERY = {
 			const {
 				si_token,
 				sh_vk,
+				k_wallet,
 			} = await load(g_argv, [
 				...g_argv.injectTokenId? ['token-id'] as const: [],
 				...g_argv.injectViewerInfo? ['vk'] as const: [],
@@ -40,7 +41,10 @@ export const H_CMDS_QUERY = {
 			const h_args = cli_entries(g_argv.args!);
 
 			if(g_argv.injectTokenId) h_args['token_id'] = si_token;
-			if(g_argv.injectViewerInfo) h_args['vk'] = sh_vk;
+			if(g_argv.injectViewerInfo) h_args['vk'] = {
+				address: k_wallet.addr,
+				viewing_key: sh_vk,
+			};
 
 			await cli_query_contract(g_argv, g_argv.method!, h_args);
 		},
