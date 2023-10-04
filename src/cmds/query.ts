@@ -41,7 +41,7 @@ export const H_CMDS_QUERY = {
 			const h_args = cli_entries(g_argv.args!);
 
 			if(g_argv.injectTokenId) h_args['token_id'] = si_token;
-			if(g_argv.injectViewerInfo) h_args['vk'] = {
+			if(g_argv.injectViewerInfo) h_args['viewer'] = {
 				address: k_wallet.addr,
 				viewing_key: sh_vk,
 			};
