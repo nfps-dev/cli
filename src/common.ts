@@ -255,7 +255,7 @@ export async function cli_query_contract(
 		k_wallet,
 	} = await load(g_argv, ['vk']);
 
-	z_auth ??= [sh_vk, k_wallet.addr];
+	if('undefined' === typeof z_auth) z_auth = [sh_vk, k_wallet.addr];
 
 	// verbose
 	print('Querying contract', {
