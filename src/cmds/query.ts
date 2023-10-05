@@ -40,7 +40,7 @@ export const H_CMDS_QUERY = {
 				...g_argv.injectViewerInfo? ['vk'] as const: [],
 			]);
 
-			const h_args = cli_entries(g_argv.args!);
+			const h_args = cli_entries(g_argv.args || '');
 
 			if(g_argv.injectTokenId) h_args['token_id'] = si_token;
 
