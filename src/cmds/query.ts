@@ -1,3 +1,7 @@
+import type {Nilable} from '@blake.regalia/belt';
+import type {AuthSecret} from '@solar-republic/neutrino';
+
+import {__UNDEFINED} from '@blake.regalia/belt/';
 
 import {cli_entries, cli_query_contract, define_command, load} from '../common';
 
@@ -41,12 +45,14 @@ export const H_CMDS_QUERY = {
 			const h_args = cli_entries(g_argv.args!);
 
 			if(g_argv.injectTokenId) h_args['token_id'] = si_token;
-			if(g_argv.injectViewerInfo) h_args['viewer'] = {
-				address: k_wallet.addr,
-				viewing_key: sh_vk,
-			};
 
-			await cli_query_contract(g_argv, g_argv.method!, h_args, null);
+			// do not auth by default
+			let z_auth: Nilable<AuthSecret> = null;
+
+			// user wants to inject viewer info
+			if(g_argv.injectViewerInfo) z_auth = [sh_vk, k_wallet.addr];
+
+			await cli_query_contract(g_argv, g_argv.method!, h_args, z_auth);
 		},
 	}),
 };

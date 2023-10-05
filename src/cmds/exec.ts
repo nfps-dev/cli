@@ -1,5 +1,5 @@
+import {cli_entries, cli_exec_contract, define_command, load} from '../common';
 import {H_OPTS_EXEC} from '../constants';
-import {cli_exec_contract, define_command, load} from '../common';
 
 export const H_CMDS_EXEC = {
 	'exec <method> [args]': define_command({
@@ -18,7 +18,7 @@ export const H_CMDS_EXEC = {
 		opts: H_OPTS_EXEC,
 		async handler(g_argv) {
 			await cli_exec_contract(g_argv, {
-				[g_argv.method!]: g_argv.args || {},
+				[g_argv.method!]: cli_entries(g_argv.args!) || {},
 			}, 60_000n);
 		},
 	}),
