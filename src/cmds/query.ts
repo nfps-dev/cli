@@ -1,8 +1,6 @@
 import type {Nilable} from '@blake.regalia/belt';
 import type {AuthSecret} from '@solar-republic/neutrino';
 
-import {__UNDEFINED} from '@blake.regalia/belt/';
-
 import {cli_entries, cli_query_contract, define_command, load} from '../common';
 
 
