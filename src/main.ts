@@ -26,6 +26,7 @@ import {H_CMDS_SET_VK} from './cmds/set-vk';
 import {H_CMDS_STORAGE} from './cmds/storage';
 import {H_CMDS_WHOAMI} from './cmds/whoami';
 import { H_CMDS_QUERY } from './cmds/query';
+import { H_CMDS_EXEC } from './cmds/exec';
 
 // polyfil crypto for older node versions
 if(!(globalThis as any).crypto) (globalThis as any).crypto = webcrypto;
@@ -97,6 +98,9 @@ const yargs = yargsImport(hideBin(process.argv));
 
 	// nfp query <cmd>
 	H_CMDS_QUERY,
+
+	// nfp exec <cmd>
+	H_CMDS_EXEC,
 ] as unknown as Dict<Command>[]).forEach((h_cmds) => {
 	commands(h_cmds);
 });
