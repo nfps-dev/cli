@@ -3,7 +3,7 @@ import path from 'node:path';
 import zlib from 'node:zlib';
 
 import {buffer_to_base64, buffer_to_base93, buffer_to_text, type Dict} from '@blake.regalia/belt';
-import {query_contract_infer} from '@solar-republic/neutrino';
+import {query_contract_infer, type AuthSecret_ViewerInfo} from '@solar-republic/neutrino';
 import kleur from 'kleur';
 import mime from 'mime-types';
 import prettyBytes from 'pretty-bytes';
@@ -101,6 +101,7 @@ export const H_CMDS_PACKAGE = {
 					const {
 						sh_vk,
 						k_contract,
+						k_wallet,
 					} = await load(g_argv, ['vk']);
 
 					// prep args
@@ -122,7 +123,7 @@ export const H_CMDS_PACKAGE = {
 					}
 
 					// query contract
-					const [g_package, xc_code, s_error] = await query_contract_infer(k_contract, 'package_version', h_args, sh_vk);
+					const [g_package, xc_code, s_error] = await query_contract_infer(k_contract, 'package_version', h_args, [sh_vk, k_wallet.addr]);
 
 					// query failed
 					if(xc_code) return exit(s_error);
@@ -178,7 +179,10 @@ export const H_CMDS_PACKAGE = {
 					const {
 						sh_vk,
 						k_contract,
+						k_wallet,
 					} = await load(g_argv, ['vk']);
+
+					const a_auth: AuthSecret_ViewerInfo = [sh_vk, k_wallet.addr];
 
 					// positional path arg
 					const sr_path = g_argv.file!;
@@ -230,7 +234,7 @@ export const H_CMDS_PACKAGE = {
 					{
 						const [g_info, xc_code_info, s_err_info] = await query_contract_infer(k_contract, 'package_info', {
 							package_id: si_package,
-						}, sh_vk);
+						}, a_auth);
 
 						// query failed
 						if(xc_code_info) {
